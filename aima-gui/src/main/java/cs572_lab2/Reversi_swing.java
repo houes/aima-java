@@ -16,8 +16,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JToolBar;
 
-import aima.core.search.adversarial.AdversarialSearch;
-import aima.core.search.adversarial.AlphaBetaSearch;
+//import aima.core.search.adversarial.AdversarialSearch;
+//import aima.core.search.adversarial.AlphaBetaSearch;
 import aima.core.search.adversarial.IterativeDeepeningAlphaBetaSearch;
 import aima.core.search.adversarial.MinimaxSearch;
 import aima.core.search.framework.Metrics;
@@ -111,14 +111,14 @@ public class Reversi_swing {
 				if (ae.getSource() == proposeButton)
 					proposeMove();
 				else {
-					for (int i = 0; i < 9; i++)
+					for (int i = 0; i < 64; i++)
 						if (ae.getSource() == squares[i])
 							currState = game.getResult(currState,
-									new XYLocation(i % 3, i / 3));
+									new XYLocation(i % 8, i / 8));
 				}
 			}
-			for (int i = 0; i < 9; i++) {
-				String val = currState.getValue(i % 3, i / 3);
+			for (int i = 0; i < 64; i++) {
+				String val = currState.getValue(i % 8, i / 8);
 				if (val == ReversiState.EMPTY)
 					val = "";
 				squares[i].setText(val);
@@ -135,7 +135,7 @@ public class Reversi_swing {
 				search = MinimaxSearch.createFor(game);
 				break;
 			case 1:
-				search = AlphaBetaSearch.createFor(game);
+				search = AlphaBetaSearchCutoff.createFor(game);
 				break;
 			case 2:
 				search = IterativeDeepeningAlphaBetaSearch.createFor(game, 0.0,

@@ -2,6 +2,7 @@ package cs572_lab2;
 
 import java.util.List;
 
+import aima.core.environment.tictactoe.TicTacToeState;
 import aima.core.search.adversarial.Game;
 import aima.core.util.datastructure.XYLocation;
 
@@ -33,7 +34,7 @@ public class ReversiGame implements Game<ReversiState, XYLocation, String> {
 
 	@Override
 	public List<XYLocation> getActions(ReversiState state) {
-		return state.getUnMarkedPositions();
+		return state.getFeasiblePositions();
 	}
 
 	@Override
@@ -52,11 +53,21 @@ public class ReversiGame implements Game<ReversiState, XYLocation, String> {
 	public double getUtility(ReversiState state, String player) {
 		double result = state.getUtility();
 		if (result != -1) {
-			if (player == ReversiState.O)
-				result = 1 - result;
+											// terminal state
+			if (player == TicTacToeState.O)
+				result = 1 - result;			
 		} else {
-			throw new IllegalArgumentException("State is not terminal.");
+											// non-terminal state
+			int markedPositions = state.getNumberOfMarkedPositions();
+			int num_black = state.getNumberOfBlackPieces();
+			int num_white = markedPositions- num_black;
+			
+			if (player == ReversiState.X)
+				result = num_black - num_white;
+			else
+				result = num_white - num_black;
 		}
+		
 		return result;
 	}
 }
