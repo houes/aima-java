@@ -67,7 +67,7 @@ public class AlphaBetaSearchCutoff<STATE, ACTION, PLAYER> implements
 		ACTION result = null;
 		double resultValue = Double.NEGATIVE_INFINITY;
 		PLAYER player = game.getPlayer(state);
-		for (ACTION action : game.getActions(state)) {
+		for (ACTION action : game.getActions(state,true)) {
 			double value = minValue(game.getResult(state, action), player,
 					Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
 			if (value > resultValue) {
@@ -87,7 +87,7 @@ public class AlphaBetaSearchCutoff<STATE, ACTION, PLAYER> implements
 				return game.getUtility(state, player);
 		
 		double value = Double.NEGATIVE_INFINITY;
-		for (ACTION action : game.getActions(state)) {
+		for (ACTION action : game.getActions(state,false)) {
 			value = Math.max(value, minValue( //
 					game.getResult(state, action), player, alpha, beta));
 			if (value >= beta)
@@ -106,7 +106,7 @@ public class AlphaBetaSearchCutoff<STATE, ACTION, PLAYER> implements
 				return game.getUtility(state, player);
 		
 		double value = Double.POSITIVE_INFINITY;
-		for (ACTION action : game.getActions(state)) {
+		for (ACTION action : game.getActions(state,true)) {
 			value = Math.min(value, maxValue( //
 					game.getResult(state, action), player, alpha, beta));
 			if (value <= alpha)

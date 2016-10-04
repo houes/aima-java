@@ -33,8 +33,8 @@ public class ReversiGame implements Game<ReversiState, XYLocation, String> {
 	}
 
 	@Override
-	public List<XYLocation> getActions(ReversiState state) {
-		return state.getFeasiblePositions();
+	public List<XYLocation> getActions(ReversiState state, boolean ascendingOrder) {
+		return state.getFeasiblePositions(ascendingOrder);
 	}
 
 	@Override

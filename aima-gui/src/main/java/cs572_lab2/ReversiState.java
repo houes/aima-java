@@ -2,7 +2,11 @@ package cs572_lab2;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 //import aima.core.util.datastructure.XYLocation;
 
@@ -59,18 +63,53 @@ public class ReversiState implements Cloneable {
 		}
 	}
 
-	public List<XYLocation> getFeasiblePositions()
+
+	public List<XYLocation> getFeasiblePositions(boolean ascendingOrder)
 	{
+		//boolean ascendingOrder = true;
+		
 		List<XYLocation> unMarkedPositions = getUnMarkedPositions();
 		List<XYLocation> feasiblePositions = new ArrayList<>();
+		Map<Integer,XYLocation> fitValue_feasiblePositions = new TreeMap<Integer,XYLocation>();
+		Map<Integer,XYLocation> fitValue_feasiblePositions_reverse= new TreeMap<Integer,XYLocation>(Collections.reverseOrder());
 		
 		for(int i=0;i<unMarkedPositions.size();i++)
 		{
 			XYLocation node = unMarkedPositions.get(i);
 			int col = node.getXCoOrdinate();
 			int row = node.getYCoOrdinate();
-			if(hasNeighbours(node) && getNumberOfPossibleFlips(col, row)!=0)
-				feasiblePositions.add(node);				
+			if(hasNeighbours(node))
+			{
+				int num_flips = getNumberOfPossibleFlips(col, row);
+				if(num_flips!=0)
+				{
+					if(ascendingOrder)
+						fitValue_feasiblePositions.put(num_flips, node);
+					else
+						fitValue_feasiblePositions_reverse.put(num_flips, node);
+					//feasiblePositions.add(node);	
+				}
+			}
+		}
+
+		if(ascendingOrder)
+		{     
+			 for(Map.Entry<Integer,XYLocation> entry : fitValue_feasiblePositions.entrySet()) 
+			 {
+				 Integer key = entry.getKey();
+				 XYLocation value = entry.getValue();
+				 feasiblePositions.add(value);
+			 }
+		}
+		else // descending order
+		{
+			 for(Map.Entry<Integer,XYLocation> entry : fitValue_feasiblePositions_reverse.entrySet()) 
+			 {
+				 Integer key = entry.getKey();
+				 XYLocation value = entry.getValue();
+				 feasiblePositions.add(value);
+			 }
+			
 		}
 		
 		return feasiblePositions;
@@ -543,7 +582,7 @@ public class ReversiState implements Cloneable {
 	
 	private void analyzeUtility() {
 
-		if( getNumberOfMarkedPositions() < 64 && getFeasiblePositions().size()!=0 ) // still has feasible move
+		if( getNumberOfMarkedPositions() < 64 && getFeasiblePositions(true).size()!=0 ) // still has feasible move
 			utility = -1;  
 		else // terminal status
 		{
