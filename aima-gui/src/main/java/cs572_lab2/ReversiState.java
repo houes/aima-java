@@ -54,8 +54,8 @@ public class ReversiState implements Cloneable {
 		if (utility == -1 && getValue(col, row) == EMPTY) {
 			board[getAbsPosition(col, row)] = playerToMove;
 			flipPieces(col,row);
-			analyzeUtility();
 			playerToMove = (playerToMove == X ? O : X);
+			analyzeUtility();
 		}
 	}
 
@@ -543,14 +543,19 @@ public class ReversiState implements Cloneable {
 	
 	private void analyzeUtility() {
 
-		if( getNumberOfMarkedPositions() < 64)
-			utility = -1;  // not terminal needs heuristic function here?
-		else if ( getNumberOfBlackPieces() > 32)
-			utility = 1;   // black(X) win
-		else if ( getNumberOfBlackPieces() == 32)
-			utility = 0.5; // draw
-		else
-			utility = 0;   // while(O) win
+		if( getNumberOfMarkedPositions() < 64 && getFeasiblePositions().size()!=0 ) // still has feasible move
+			utility = -1;  
+		else // terminal status
+		{
+			int numBlacks = getNumberOfBlackPieces();
+			int numWhite  = getNumberOfMarkedPositions() - numBlacks;
+			if (  numBlacks > numWhite)
+				utility = 1;   // black(X) win
+			else if ( numBlacks == numWhite)
+				utility = 0.5; // draw
+			else
+				utility = 0;   // while(O) win
+		}
 	}
 
 	public int getNumberOfBlackPieces()

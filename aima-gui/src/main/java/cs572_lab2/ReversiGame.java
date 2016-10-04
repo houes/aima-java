@@ -55,7 +55,7 @@ public class ReversiGame implements Game<ReversiState, XYLocation, String> {
 		int depth = state.getNumberOfMarkedPositions();
 		int rest_moves = 64-depth;
 		
-		if( rest_moves >= 5)//15 is good enough
+		if( rest_moves >= 13)//15 is good enough
 			return true;
 		else
 			return false;		
