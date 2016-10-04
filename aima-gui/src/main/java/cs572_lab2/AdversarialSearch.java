@@ -1,7 +1,5 @@
 package cs572_lab2;
 
-import aima.core.search.framework.Metrics;
-
 /**
  * Variant of the search interface. Since players can only control the next
  * move, method <code>makeDecision</code> returns only one action, not a

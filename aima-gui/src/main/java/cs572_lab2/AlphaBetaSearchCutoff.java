@@ -1,7 +1,5 @@
 package cs572_lab2;
 
-import aima.core.search.framework.Metrics;
-
 /**
  * Artificial Intelligence A Modern Approach (3rd Ed.): Page 173.<br>
  * 
@@ -82,8 +80,12 @@ public class AlphaBetaSearchCutoff<STATE, ACTION, PLAYER> implements
 
 	public double maxValue(STATE state, PLAYER player, double alpha, double beta) {
 		metrics.incrementInt(METRICS_NODES_EXPANDED);
-		if (game.isTerminal(state))
-			return game.getUtility(state, player);
+		
+		if(game.needsCutOff(state))
+			return game.getEvaluation(state, player);
+		else if (game.isTerminal(state))
+				return game.getUtility(state, player);
+		
 		double value = Double.NEGATIVE_INFINITY;
 		for (ACTION action : game.getActions(state)) {
 			value = Math.max(value, minValue( //
@@ -97,8 +99,12 @@ public class AlphaBetaSearchCutoff<STATE, ACTION, PLAYER> implements
 
 	public double minValue(STATE state, PLAYER player, double alpha, double beta) {
 		metrics.incrementInt(METRICS_NODES_EXPANDED);
-		if (game.isTerminal(state))
-			return game.getUtility(state, player);
+		
+		if(game.needsCutOff(state))
+			return game.getEvaluation(state, player);
+		else if (game.isTerminal(state))
+				return game.getUtility(state, player);
+		
 		double value = Double.POSITIVE_INFINITY;
 		for (ACTION action : game.getActions(state)) {
 			value = Math.min(value, maxValue( //

@@ -16,12 +16,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JToolBar;
 
-//import aima.core.search.adversarial.AdversarialSearch;
-//import aima.core.search.adversarial.AlphaBetaSearch;
-import aima.core.search.adversarial.IterativeDeepeningAlphaBetaSearch;
-import aima.core.search.adversarial.MinimaxSearch;
-import aima.core.search.framework.Metrics;
-import aima.core.util.datastructure.XYLocation;
+//import aima.core.search.adversarial.IterativeDeepeningAlphaBetaSearch;
+//import aima.core.search.adversarial.MinimaxSearch;
+
 
 /**
  * Simple graphical Tic-tac-toe game application. It demonstrates the Minimax
@@ -130,7 +127,7 @@ public class Reversi_swing {
 		private void proposeMove() {
 			AdversarialSearch<ReversiState, XYLocation> search;
 			XYLocation action;
-			switch (strategyCombo.getSelectedIndex()) {
+/*			switch (strategyCombo.getSelectedIndex()) {
 			case 0:
 				search = MinimaxSearch.createFor(game);
 				break;
@@ -146,7 +143,10 @@ public class Reversi_swing {
 						1.0, 1000);
 				((IterativeDeepeningAlphaBetaSearch<?, ?, ?>) search)
 						.setLogEnabled(true);
-			}
+			}*/
+			
+			search = AlphaBetaSearchCutoff.createFor(game);
+			
 			action = search.makeDecision(currState);
 			searchMetrics = search.getMetrics();
 			currState = game.getResult(currState, action);
